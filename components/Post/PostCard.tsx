@@ -20,13 +20,14 @@ const PostCard: React.FC<PostCardProps> = ({
       <Link href={`/post/${id}`} className="block h-full">
         <header className="relative">
           <figure className="aspect-[4/3] overflow-hidden">
-            <img
+            <Image
               src={imageUrl || "/banner-stock.jpg"}
               alt={title}
+              fill
               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-              loading="lazy"
               onError={(e) => {
-                (e.target as HTMLImageElement).src = "/banner-stock.jpg";
+                // @ts-ignore
+                e.target.src = "/banner-stock.jpg";
               }}
             />
           </figure>

@@ -11,10 +11,15 @@ interface Post {
   imageUrl?: string;
 }
 
+interface ImageData {
+  url?: string;
+  [key: string]: any;
+}
+
 const ITEMS_PER_PAGE_OPTIONS = [10, 20, 50];
 
 // Helper function to extract image URL from various formats
-const extractImageUrl = (imageData: any): string | null => {
+const extractImageUrl = (imageData: string | ImageData | ImageData[] | null): string | null => {
   if (!imageData) return null;
   
   // If it's an array, take the first item
@@ -55,9 +60,15 @@ const buildImageUrl = (imageUrl: string | null): string => {
 };
 
 // Main function to get image URL with fallback priority
-const getImageUrl = (item: any): string => {
+interface ItemWithImages {
+  medium_image?: string | ImageData | ImageData[];
+  image?: string | ImageData | ImageData[];
+  [key: string]: any;
+}
+
+const getImageUrl = (item: ItemWithImages): string => {
   // Try medium_image first
-  let imageUrl = extractImageUrl(item.medium_image);
+  let imageUrl = extractImageUrl(item.medium_image || null);
   
   // If no medium_image, try small_image
   if (!imageUrl) {
