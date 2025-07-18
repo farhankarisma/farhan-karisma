@@ -13,7 +13,22 @@ interface Post {
 
 interface ImageData {
   url?: string;
-  [key: string]: any;
+  [key: string]: unknown;
+}
+
+interface ApiResponse {
+  data: Array<{
+    id: string;
+    title: string;
+    published_at: string;
+    medium_image?: string | ImageData | ImageData[];
+    small_image?: string | ImageData | ImageData[];
+    [key: string]: unknown;
+  }>;
+  meta?: {
+    total: number;
+    [key: string]: unknown;
+  };
 }
 
 const ITEMS_PER_PAGE_OPTIONS = [10, 20, 50];
@@ -121,11 +136,11 @@ export default function PostsList() {
         }
         return res.json();
       })
-      .then((data) => {
+      .then((data: ApiResponse) => {
         console.log('Frontend received data:', data);
         setTotalPosts(data.meta?.total || 0);
         
-        const mappedPosts = (data.data || []).map((item: any) => {
+        const mappedPosts = (data.data || []).map((item) => {
           const imageUrl = getImageUrl(item);
           
           console.log(`Post ${item.id} image processing:`, {
@@ -133,8 +148,8 @@ export default function PostsList() {
             small_image: item.small_image,
             medium_first: Array.isArray(item.medium_image) ? item.medium_image[0] : item.medium_image,
             small_first: Array.isArray(item.small_image) ? item.small_image[0] : item.small_image,
-            extracted_medium: extractImageUrl(item.medium_image),
-            extracted_small: extractImageUrl(item.small_image),
+            extracted_medium: extractImageUrl(item.medium_image || null),
+            extracted_small: extractImageUrl(item.small_image || null),
             final_url: imageUrl
           });
           

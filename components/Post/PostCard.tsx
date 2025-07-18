@@ -26,7 +26,7 @@ const PostCard: React.FC<PostCardProps> = ({
               fill
               className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
               onError={(e) => {
-                // @ts-ignore
+                // @ts-expect-error - Event target is HTMLImageElement
                 e.target.src = "/banner-stock.jpg";
               }}
             />
