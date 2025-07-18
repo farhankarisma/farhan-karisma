@@ -76,6 +76,9 @@ const buildImageUrl = (imageUrl: string | null): string => {
 
 // Main function to get image URL with fallback priority
 interface ItemWithImages {
+  id: string;
+  title: string;
+  published_at: string;
   medium_image?: string | ImageData | ImageData[];
   image?: string | ImageData | ImageData[];
   small_image?: string | ImageData | ImageData[];
@@ -83,7 +86,6 @@ interface ItemWithImages {
   thumbnail?: string | ImageData | ImageData[];
   photo?: string | ImageData | ImageData[];
   picture?: string | ImageData | ImageData[];
-  [key: string]: unknown;
 }
 
 const getImageUrl = (item: ItemWithImages): string => {
