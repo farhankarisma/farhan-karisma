@@ -12,22 +12,33 @@ interface Post {
 }
 
 interface ImageData {
-  url?: string;
-  [key: string]: unknown;
+  url: string;
+  width?: number;
+  height?: number;
+  mime?: string;
+  size?: number;
+}
+
+interface ApiResponseItem {
+  id: string;
+  title: string;
+  published_at: string;
+  medium_image?: string | ImageData | ImageData[];
+  small_image?: string | ImageData | ImageData[];
+  image?: string | ImageData | ImageData[];
+  featured_image?: string | ImageData | ImageData[];
+  thumbnail?: string | ImageData | ImageData[];
+  photo?: string | ImageData | ImageData[];
+  picture?: string | ImageData | ImageData[];
 }
 
 interface ApiResponse {
-  data: Array<{
-    id: string;
-    title: string;
-    published_at: string;
-    medium_image?: string | ImageData | ImageData[];
-    small_image?: string | ImageData | ImageData[];
-    [key: string]: unknown;
-  }>;
-  meta?: {
+  data: ApiResponseItem[];
+  meta: {
     total: number;
-    [key: string]: unknown;
+    current_page: number;
+    per_page: number;
+    last_page: number;
   };
 }
 
@@ -75,18 +86,7 @@ const buildImageUrl = (imageUrl: string | null): string => {
 };
 
 // Main function to get image URL with fallback priority
-interface ItemWithImages {
-  id: string;
-  title: string;
-  published_at: string;
-  medium_image?: string | ImageData | ImageData[];
-  image?: string | ImageData | ImageData[];
-  small_image?: string | ImageData | ImageData[];
-  featured_image?: string | ImageData | ImageData[];
-  thumbnail?: string | ImageData | ImageData[];
-  photo?: string | ImageData | ImageData[];
-  picture?: string | ImageData | ImageData[];
-}
+type ItemWithImages = ApiResponseItem;
 
 const getImageUrl = (item: ItemWithImages): string => {
   // Try medium_image first
