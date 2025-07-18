@@ -78,7 +78,12 @@ const buildImageUrl = (imageUrl: string | null): string => {
 interface ItemWithImages {
   medium_image?: string | ImageData | ImageData[];
   image?: string | ImageData | ImageData[];
-  [key: string]: any;
+  small_image?: string | ImageData | ImageData[];
+  featured_image?: string | ImageData | ImageData[];
+  thumbnail?: string | ImageData | ImageData[];
+  photo?: string | ImageData | ImageData[];
+  picture?: string | ImageData | ImageData[];
+  [key: string]: unknown;
 }
 
 const getImageUrl = (item: ItemWithImages): string => {
@@ -87,23 +92,18 @@ const getImageUrl = (item: ItemWithImages): string => {
   
   // If no medium_image, try small_image
   if (!imageUrl) {
-    imageUrl = extractImageUrl(item.small_image);
+    imageUrl = extractImageUrl(item.small_image || null);
   }
-  
+
   // Try other possible image properties
   if (!imageUrl) {
-    const possibleImageProps = [
-      'image', 'featured_image', 'thumbnail', 'photo', 'picture'
-    ];
-    
-    for (const prop of possibleImageProps) {
-      if (item[prop]) {
-        imageUrl = extractImageUrl(item[prop]);
-        if (imageUrl) break;
-      }
-    }
+    if (item.featured_image) imageUrl = extractImageUrl(item.featured_image || null);
+    if (!imageUrl && item.image) imageUrl = extractImageUrl(item.image || null);
+    if (!imageUrl && item.thumbnail) imageUrl = extractImageUrl(item.thumbnail || null);
+    if (!imageUrl && item.photo) imageUrl = extractImageUrl(item.photo || null);
+    if (!imageUrl && item.picture) imageUrl = extractImageUrl(item.picture || null);
   }
-  
+
   return buildImageUrl(imageUrl);
 };
 
